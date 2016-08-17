@@ -1,3 +1,4 @@
+# coding: utf-8
 import random
 from environment import Agent, Environment
 from planner import RoutePlanner
@@ -12,18 +13,22 @@ class LearningAgent(Agent):
         self.color = 'red'  # override color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         # TODO: Initialize any additional variables here
+        self.qtable = {}
 
     def reset(self, destination=None):
         self.planner.route_to(destination)
         # TODO: Prepare for a new trip; reset any variables here, if required
+
 
     def update(self, t):
         # Gather inputs
         self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
         inputs = self.env.sense(self)
         deadline = self.env.get_deadline(self)
+        # print self.next_waypoint, inputs
 
         # TODO: Update state
+        self.state = (self.next_waypoint, inputs['light'], inputs['oncoming'], inputs['left'], inputs['right'])
         
         # TODO: Select action according to your policy
         action = random.choice(Environment.valid_actions)
@@ -32,6 +37,7 @@ class LearningAgent(Agent):
         reward = self.env.act(self, action)
 
         # TODO: Learn policy based on state, action, reward
+        # Q(s, a) = (1 - α) * Q(s, a) + α * (R + β * max(Q(s + 1, )))
 
         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
