@@ -5,7 +5,9 @@
 
 *问题: 在你的报告中，说明观察到的智能体的行为。它最终到达目标位置了吗？有什么其他值得注意的地方吗？*
 
-<font color=red>Answer:</font> 由于智能体的行为是随机的，运气好的话，它是可以到达目标位置的，但是到达目标位置时一般都超过了deadline。如果deadline = -100时智能体还没有到达目标位置的话，就会尝试失败。
+<font color=red>Answer:</font> 
+
+由于智能体的行为是随机的，运气好的话，它是可以到达目标位置的，但是到达目标位置时一般都超过了deadline。如果deadline = -100时智能体还没有到达目标位置的话，就会尝试失败。
 
 ####Inform the Driving Agent
 
@@ -54,7 +56,8 @@ light是为了不违反交通规则，不发生撞车事故。
 *QUESTION: Does your agent get close to finding an optimal policy, i.e. reach the destination in the minimum possible time, and not incur any penalties? How would you describe an optimal policy for this problem?*
 
 <font color=red>Answer:</font> 在程序中的智能体依据优化，已经可以以最短路径到达目的地，并且能够保证不会得到任何处罚。我认为它的策略可以这样简单表示：
-```python
+
+```
 if light == 'green':
     self.action = self.next_waypoint
 else:
