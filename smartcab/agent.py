@@ -16,9 +16,11 @@ class LearningAgent(Agent):
         # TODO: Initialize any additional variables here
         self.Q = {}
         self.alpha = 0.1
-        self.gamma = 0.1
-        self.epsilon = 0.2
+        self.gamma = 0.09
+        self.epsilon = 1
         self.ntrain = 0
+        self.allreward = 0
+        self.succeed = 0
 
         self.laststate = None
         self.lastaction = None
@@ -67,6 +69,9 @@ class LearningAgent(Agent):
 
         # Execute action and get reward
         reward = self.env.act(self, action)
+        self.allreward += reward
+        if reward == 12 and self.allreward > 0:
+            self.succeed += 1
 
         # TODO: Learn policy based on state, action, reward
         # Q(s,a) = (1-α) * Q(s,a) + α * (R + γ * max (Q(s + 1)))
@@ -78,14 +83,12 @@ class LearningAgent(Agent):
         self.lastaction = action
         self.laststate = self.state
         self.lastreward = reward
-        if reward < 0:
-            print reward
+
         # print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
 
 def run():
     """Run the agent for a finite number of trials."""
-
     # Set up environment and agent
     e = Environment()  # create environment (also adds some dummy traffic)
     a = e.create_agent(LearningAgent)  # create agent
@@ -99,8 +102,47 @@ def run():
 
     sim.run(n_trials=100)  # run for a specified number of trials
     # NOTE: To quit midway, press Esc or close pygame window, or hit Ctrl+C on the command-line
-    print a.Q
 
+    import numpy as np
+    # scores = np.ndarray((11, 11))
+    # for alpha in range(11):
+    #     for gamma in range(11):
+    #         score = 0
+    #         for i in range(10):
+    #             e = Environment()
+    #             a = e.create_agent(LearningAgent)
+    #
+    #             a.alpha = alpha / 10.0
+    #             a.gamma = gamma / 100.0
+    #
+    #             e.set_primary_agent(a, enforce_deadline=True)
+    #             sim = Simulator(e, update_delay=0, display=False)
+    #             sim.run(n_trials=100)
+    #             score += a.succeed
+    #         score /= 10.0
+    #         print '{},{},{}'.format(alpha, gamma, score)
+    #         scores[alpha, gamma] = score
+    #
+    # for a in range(11):
+    #     for b in range(11):
+    #         print str(scores[a, b]) + ',',
+    #     print ''
+
+    # print 'epsilon,score'
+    # for epsilon in range(10):
+    #     score = 0
+    #     for i in range(10):
+    #         e = Environment()
+    #         a = e.create_agent(LearningAgent)
+    #
+    #         a.epsilon = epsilon / 10.0  # Line 44
+    #
+    #         e.set_primary_agent(a, enforce_deadline=True)
+    #         sim = Simulator(e, update_delay=0, display=False)
+    #         sim.run(n_trials=100)
+    #         score += a.succeed
+    #     score /= 10.0
+    #     print '{},{}'.format(epsilon/10.0, score)
 
 if __name__ == '__main__':
     run()

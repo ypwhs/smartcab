@@ -47,18 +47,23 @@ light，oncoming，left是为了不违反交通规则，不发生撞车事故。
 <font color=red>Answer:</font>
 
 
-#### alpha
+#### alpha gamma
 
-只要不把alpha调到大于1，或者减小到0，学习效果基本没有变化。因此设置为0.3。
-
-#### gamma
-
-情况和alpha一样，只要在(0,1)就是合理的。因此设置为0.1.
-
+我将alpha和gamma分别从0-1以0.1为间隔遍历了所有的值，并且以能够到达目标位置且净奖励为正作为评分标准，满分为100分，并且取10次评分平均值为最终评分。输出的表格如下图：
+![](001.png)
+我们能看出在gamma不为0时成绩都比较好，但是gamma从0到0.1变化时成绩出现了突变，所以猜测最好成绩也有可能在0－0.1之间，于是我们对0-0.1之间又进行了评分，如下图：
+![](002.png)
+在这个图表中我观察到gamma不等于0时，智能体的表现都是不错的，都在90分甚至95分以上，但是还是能找到表现最优的参数值alpha＝0.1，gamma＝0.09，此时分数为99分。并且我对每一个参数组合都进行了10次评分取平均值，所以这个结果是可信的，而不是偶然得出。
 #### epsilon
-
-在训练次数小于60次的时候，`self.epsilon = (80 - self.ntrain) / 60`，在最开始的时候epsilon的值应该大一些，智能体应该多尝试不同的情况以适应不同的环境。同时epsilon的值不断减小，直到60次以后，epsilon ＝ 0.
+在alpha＝0.1，gamma＝0.09的情况下对epsilon从0-1以0.1为间隔遍历了所有的值,仍然以能够到达目标位置且净奖励为正作为评分标准，满分为100分。输出的表格如下图：
+![](003.png)
+我们能看出随着epsilon值升高，分数是下降的。但是直接取epsilon＝0或者0.1我认为还是不合适的。因为在最开始的时候epsilon的值应该大一些，智能体应该多尝试不同的情况以适应不同的环境。在训练次数小于60次的时候，`self.epsilon = (60 - self.ntrain) / 60`，同时epsilon的值不断减小，直到60次以后，epsilon ＝ 0.经过测试，这种动态epsilon的评分可以达到98.2分，比单纯的定值都要更好。
 
 *QUESTION: Does your agent get close to finding an optimal policy, i.e. reach the destination in the minimum possible time, and not incur any penalties? How would you describe an optimal policy for this problem?*
 
-<font color=red>Answer:</font> 在程序中的智能体依据优化，已经可以顺利到达目的地，并且能够保证不会得到任何处罚。对于这个智能体来说，最优算法应该是在不违反交通规则，不发生事故的前提下快速到达目标位置。
+<font color=red>Answer:</font> 
+
+
+在这个算法中，通过类似于 Grid Search 的方法来确定alpha，gamma的最优值，并且再次对epsilon进行了优化。
+
+在程序中的智能体依据优化，已经可以顺利到达目的地，并且能够保证净奖励为正。对于这个智能体来说，最优算法应该是在不违反交通规则，不发生事故的前提下快速到达目标位置。
