@@ -26,6 +26,12 @@ light，oncoming，left是为了不违反交通规则，不发生撞车事故。
 
 没有选择right是因为右边的车不会对智能体产生影响，不需要考虑。
 
+没有选择deadline是因为：
+
+1. 对于到达目标位置而言时间足够充分
+2. deadline对智能体做出决策并没有帮助
+3. 我们不能因为时间紧迫而违反交通规则
+
 *OPTIONAL: How many states in total exist for the smartcab in this environment? Does this number seem reasonable given that the goal of Q-Learning is to learn and make informed decisions about each state? Why or why not?*
 
 <font color=red>Answer:</font> 
