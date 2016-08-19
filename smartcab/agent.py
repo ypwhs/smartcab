@@ -41,7 +41,7 @@ class LearningAgent(Agent):
         self.lastaction = None
         self.lastreward = None
         self.ntrain += 1
-        self.epsilon = (60 - self.ntrain) / 60
+        self.epsilon = 1.0 / self.ntrain
 
     def getmaxq(self):
         return max(self.Q[self.state].iteritems(), key=lambda x: x[1])[1]
@@ -72,6 +72,8 @@ class LearningAgent(Agent):
         self.allreward += reward
         if reward == 12 and self.allreward > 0:
             self.succeed += 1
+        if reward < 0:
+            print self.ntrain, reward
 
         # TODO: Learn policy based on state, action, reward
         # Q(s,a) = (1-α) * Q(s,a) + α * (R + γ * max (Q(s + 1)))
@@ -96,11 +98,11 @@ def run():
     # NOTE: You can set enforce_deadline=False while debugging to allow longer trials
 
     # Now simulate it
-    sim = Simulator(e, update_delay=0.01,
-                    display=True)  # create simulator (uses pygame when display=True, if available)
+    sim = Simulator(e, update_delay=0,
+                    display=False)  # create simulator (uses pygame when display=True, if available)
     # NOTE: To speed up simulation, reduce update_delay and/or set display=False
 
-    sim.run(n_trials=100)  # run for a specified number of trials
+    sim.run(n_trials=100000)  # run for a specified number of trials
     # NOTE: To quit midway, press Esc or close pygame window, or hit Ctrl+C on the command-line
 
     import numpy as np
